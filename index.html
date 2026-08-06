@@ -1,11 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do List</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Todo List</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#3B2F22;
+    --board:#D8CBAE;
+    --board-dot:#c4b492;
+    --accent:#8A3B2B;
+    --note-yellow:#E9D8A6;
+    --note-mint:#B7C6A6;
+    --note-blue:#A9BCC2;
+    --note-pink:#D4B2A7;
+  }
+  body{
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    background:var(--board);
+    background-image:
+      radial-gradient(var(--board-dot) 1px, transparent 1px),
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 1px, transparent 1px, transparent 3px);
+    background-size: 18px 18px, auto;
+  }
+  .font-hand{ font-family:'Caveat', cursive; }
+
+  .note{
+    position:relative;
+    box-shadow: 1px 3px 6px rgba(0,0,0,0.2);
+    background-image: radial-gradient(rgba(0,0,0,0.06) 1px, transparent 1px);
+    background-size: 6px 6px;
+    filter: sepia(0.15);
+  }
+  .note::after{
+    /* worn corner */
+    content:"";
+    position:absolute;
+    bottom:0;
+    right:0;
+    width:22px;
+    height:22px;
+    background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.12) 50%);
+  }
+  .note::before{
+    /* pin */
+    content:"";
+    position:absolute;
+    top:-9px;
+    left:50%;
+    transform:translateX(-50%);
+    width:13px;
+    height:13px;
+    border-radius:9999px;
+    background: radial-gradient(circle at 35% 30%, #d8cdb8 0%, var(--accent) 45%, #4d1f16 100%);
+    box-shadow: 0 2px 3px rgba(0,0,0,0.35);
+  }
+  .note.done{
+    opacity:0.55;
+  }
+  .note.done .note-text{
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+  }
+
+  .tab-btn.active{
+    background: var(--ink);
+    color: #EFE6D0;
+  }
+
+  .board-empty{
+    border: 2px dashed #a89a76;
+  }
+
+  input::placeholder{ color:#8a7a5c; }
+</style>
 </head>
-<body>
-    
+<body class="min-h-screen">
+
+<div class="max-w-4xl mx-auto px-5 py-10">
+
+  <!-- Header -->
+  <header class="mb-8">
+    <h1 class="font-hand text-6xl leading-none" style="color:var(--accent)">Stickies</h1>
+    <p class="text-sm text-[#6b6455] mt-1">Pin a task. Tear it off when you're done.</p>
+  </header>
+
+  <!-- Add task toolbar -->
+  <div class="flex gap-2 mb-6">
+    <input
+      id="taskInput"
+      type="text"
+      placeholder="Write a new task…"
+      class="flex-1 bg-white/70 border border-[#c9c0ac] rounded-md px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] placeholder:italic"
+    >
+    <button
+      id="addBtn"
+      class="px-5 rounded-md font-semibold text-[#F4F1E8] active:scale-95 transition"
+      style="background:var(--ink)"
+    >
+      + Pin it
+    </button>
+  </div>
+
+  <!-- Filter tabs -->
+  <div class="flex gap-2 mb-8">
+    <button data-filter="all" class="filter tab-btn active px-4 py-1.5 rounded-full text-sm font-medium border border-[#c9c0ac] bg-white/60 transition">All</button>
+    <button data-filter="active" class="filter tab-btn px-4 py-1.5 rounded-full text-sm font-medium border border-[#c9c0ac] bg-white/60 transition">Active</button>
+    <button data-filter="completed" class="filter tab-btn px-4 py-1.5 rounded-full text-sm font-medium border border-[#c9c0ac] bg-white/60 transition">Completed</button>
+  </div>
+
+  <!-- Board -->
+  <div id="taskList" class="flex flex-wrap gap-6 items-start min-h-[160px]"></div>
+
+  <!-- Empty state -->
+  <div id="emptyState" class="hidden board-empty rounded-lg p-8 text-center text-[#8a8272] mt-4">
+    <p class="font-hand text-2xl">Nothing here yet.</p>
+    <p class="text-sm mt-1">Pin a task above to get started.</p>
+  </div>
+
+  <!-- Counter -->
+  <p id="counter" class="text-sm text-[#6b6455] mt-8 text-center"></p>
+
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
